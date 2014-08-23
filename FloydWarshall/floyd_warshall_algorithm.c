@@ -2,9 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-void floyd_warshall(double **graph, int graph_size)
+void floyd_warshall(double **graph, unsigned long graph_size)
 {
-	int i, j, k = 0;
+	unsigned long i, j, k = 0;
 	double temp = 0;
 	double **temp_tab;
 
@@ -12,17 +12,6 @@ void floyd_warshall(double **graph, int graph_size)
 	{
 		graph[i][i] = 0;
 	}
-
-	for (i = 0; i < graph_size; i++)
-	{
-		for (j = 0; j < graph_size; j++)
-		{
-			printf("%d ", (int)graph[i][j]);
-		}
-		printf("\n");
-	}
-
-	printf("\n\n\n");
 
 	temp_tab = (double **)malloc(sizeof(double*) * graph_size);
 
@@ -59,12 +48,8 @@ void floyd_warshall(double **graph, int graph_size)
 			for (j = 0; j < graph_size; j++)
 			{
 				graph[i][j] = temp_tab[i][j];
-				printf("%d ", (int)graph[i][j]);
 			}
-			printf("\n");
 		}
 		k++;
-
-		printf("\n\n\n");
 	}
 }
