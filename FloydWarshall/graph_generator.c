@@ -1,28 +1,27 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <omp.h>
 
+#include "settings.h"
 #include "graph_generator.h"
 
-void init_generator()
+double** neighborhood_matrix_generator(long graph_size, t_intensity intensity)
 {
-	srand(time(NULL));
-}
-
-double** neighborhood_matrix_generator(unsigned long graph_size, t_intensity intensity)
-{
-	unsigned long i, j;
+	long i, j;
 	double **neighborhood_matrix = (double**)malloc(sizeof(double*) * graph_size);
 	int is_road_available = 0;
 	double road_occurance_probability = 0;
 
+#pragma omp parallel for num_threads(number_of_threads = 0 ? graph_size : number_of_threads)
 	for (i = 0; i < graph_size; i++)
 	{
 		neighborhood_matrix[i] = (double*)malloc(sizeof(double) * graph_size);
 	}
 
+#pragma omp parallel for num_threads(number_of_threads = 0 ? graph_size : number_of_threads)
 	for (i = 0; i < graph_size; i++)
 	{
+#pragma omp parallel for num_threads(number_of_threads = 0 ? graph_size : number_of_threads)
 		for (j = i; j < graph_size; j++)
 		{
 			if (i == j)
@@ -40,8 +39,10 @@ double** neighborhood_matrix_generator(unsigned long graph_size, t_intensity int
 		}
 	}
 
+#pragma omp parallel for num_threads(number_of_threads = 0 ? graph_size : number_of_threads)
 	for (i = 1; i < graph_size; i++)
 	{
+#pragma omp parallel for num_threads(number_of_threads = 0 ? graph_size : number_of_threads)
 		for (j = 0; j < i; j++)
 		{
 			road_occurance_probability = road_occurance_generator();
@@ -63,8 +64,9 @@ double** neighborhood_matrix_generator(unsigned long graph_size, t_intensity int
 double road_occurance_generator()
 {
 	int i;
-	double random_numbers_table[2000] = { 0.0 };
+	double random_numbers_table[GENERATOR_INTERATIONS] = { 0.0 };
 
+#pragma omp parallel for num_threads(number_of_threads = 0 ? GENERATOR_INTERATIONS : number_of_threads)
 	for (i = 0; i < 2000; i++) {
 		random_numbers_table[i] = (double)(rand() % 1000) / 1000;
 
@@ -74,21 +76,22 @@ double road_occurance_generator()
 			random_numbers_table[i] += delta;
 	}
 
-	return random_numbers_table[rand() % 2000];
+	return random_numbers_table[rand() % GENERATOR_INTERATIONS];
 }
 
 double distance_generator()
 {
 	int i;
-	double random_distance_table[2000] = { 0.0 };
+	double random_distance_table[GENERATOR_INTERATIONS] = { 0.0 };
 
-	for (i = 0; i < 2000; i++) {
+#pragma omp parallel for num_threads(number_of_threads = 0 ? GENERATOR_INTERATIONS : number_of_threads)
+	for (i = 0; i < GENERATOR_INTERATIONS; i++) {
 		random_distance_table[i] = (double)(rand() % 60000) / 100;
 
 		if (random_distance_table[i] < 10.0)
 			random_distance_table[i] += (double)(rand() % 3000) / 100;
 	}
 
-	return random_distance_table[rand() % 2000];
+	return random_distance_table[rand() % GENERATOR_INTERATIONS];
 }
 

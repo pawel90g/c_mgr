@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <omp.h>
 
-void floyd_warshall(double **graph, unsigned long graph_size)
+#include "settings.h"
+#include "floyd_warshall_algorithm.h"
+
+void floyd_warshall(double **graph, long graph_size)
 {
-	unsigned long i, j, k = 0;
+	long i, j, k = 0;
 	double temp = 0;
 	double **temp_tab;
+
 
 	for (i = 0; i < graph_size; i++)
 	{

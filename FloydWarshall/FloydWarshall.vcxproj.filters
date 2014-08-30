@@ -24,12 +24,18 @@
     <ClCompile Include="floyd_warshall_algorithm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="settings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="floyd_warshall_algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="graph_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
