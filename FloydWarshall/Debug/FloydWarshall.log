@@ -1,12 +1,12 @@
-﻿Build started 2014-09-01 22:34:00.
+﻿Build started 2014-09-02 23:47:32.
      1>Project "C:\Users\Paweł\mgr\FloydWarshall\FloydWarshall.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt main.c
-         main.c
-     1>c:\users\paweł\mgr\floydwarshall\main.c(17): warning C4013: 'init' undefined; assuming extern returning int
-     1>c:\users\paweł\mgr\floydwarshall\main.c(29): warning C4013: 'set_number_of_threads' undefined; assuming extern returning int
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt file_reader_writer.c
+         file_reader_writer.c
+     1>c:\users\paweł\mgr\floydwarshall\file_reader_writer.c(71): warning C4029: declared formal parameter list different from definition
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Paweł\mgr\Debug\FloydWarshall.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.lib" /MACHINE:X86 Debug\floyd_warshall_algorithm.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Paweł\mgr\Debug\FloydWarshall.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.lib" /MACHINE:X86 Debug\file_reader_writer.obj
+         Debug\floyd_warshall_algorithm.obj
          Debug\graph_generator.obj
          Debug\main.obj
          Debug\settings.obj
@@ -15,4 +15,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.71
+Time Elapsed 00:00:00.39
