@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <math.h>
 
 #include "settings.h"
 #include "floyd_warshall_open_mp.h"
@@ -22,11 +23,15 @@ void print_matrix(double **matrix, int matrix_size)
 	printf("\n\n");
 }
 
-void floyd_warshall(double **graph, long graph_size)
+void floyd_warshall(double **graph, long graph_size, t_thread_distribution_model t_distrib)
 {
 	long i, j, k = 0;
 	double temp = 0;
 	double **temp_tab;
+	int threads_to_use_0, threads_to_use_1;
+
+	threads_to_use_0 = t_distrib == STEADY ? sqrt(number_of_threads) == 0 ? number_of_threads : sqrt(number_of_threads) : number_of_threads;
+	threads_to_use_1 = t_distrib == STEADY ? threads_to_use_0 == 0 ? number_of_threads : number_of_threads / threads_to_use_0 : number_of_threads;
 
 #pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
 	for (i = 0; i < graph_size; i++)
@@ -44,10 +49,10 @@ void floyd_warshall(double **graph, long graph_size)
 
 	for (k = 0; k < graph_size; k++)
 	{
-#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
+#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : threads_to_use_0)
 		for (i = 0; i < graph_size; i++)
 		{
-#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
+#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : threads_to_use_1)
 			for (j = 0; j < graph_size; j++)
 			{
 				double delta = graph[i][k] + graph[k][j];
@@ -67,10 +72,10 @@ void floyd_warshall(double **graph, long graph_size)
 			}
 		}
 
-#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
+#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : threads_to_use_0)
 		for (i = 0; i < graph_size; i++)
 		{
-#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
+#pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : threads_to_use_1)
 			for (j = 0; j < graph_size; j++)
 			{
 				graph[i][j] = temp_tab[i][j];

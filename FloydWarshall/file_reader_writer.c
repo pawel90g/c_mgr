@@ -100,19 +100,19 @@ char *prepare_line_to_write(data_to_save computing_data)
 	line_array = (char*)malloc(sizeof(char) *(graph_generator_type_array_size + number_of_threads_array_size + matrix_size_array_size + distribution_threads_model_array_size + (2 * CTIME_ARRAY_SIZE_WITHOUT_EOL_SIGN) + 5 + 2));
 
 	// alloc memory for partial data arrays
-	graph_generator_type_char = (char*)malloc(sizeof(char) * graph_generator_type_array_size);
-	number_of_threads_char = (char*)malloc(sizeof(char) * number_of_threads_array_size);
-	matrix_size_char = (char*)malloc(sizeof(char) * matrix_size_array_size);
-	distribution_threads_model_char = (char*)malloc(sizeof(char) * distribution_threads_model_array_size);
+	graph_generator_type_char = (char*)malloc(sizeof(char) * 2 * graph_generator_type_array_size);
+	number_of_threads_char = (char*)malloc(sizeof(char) * 2 * number_of_threads_array_size);
+	matrix_size_char = (char*)malloc(sizeof(char) * 2 * matrix_size_array_size);
+	distribution_threads_model_char = (char*)malloc(sizeof(char) * 2 * distribution_threads_model_array_size);
 
 	computing_start_time_char = (char*)malloc(sizeof(char) * CTIME_ARRAY_SIZE);
 	computing_end_time_char = (char*)malloc(sizeof(char) * CTIME_ARRAY_SIZE);
 
 	// convert data to char arrays
-	_itoa_s(computing_data.graph_generator_type, graph_generator_type_char, sizeof(graph_generator_type_char), 10);
-	_itoa_s(computing_data.number_of_threads, number_of_threads_char, sizeof(number_of_threads_char), 10);
-	_itoa_s(computing_data.matrix_size, matrix_size_char, sizeof(matrix_size_char), 10);
-	_itoa_s(computing_data.distribution_threads_model, distribution_threads_model_char, sizeof(distribution_threads_model_char), 10);
+	_itoa_s(computing_data.graph_generator_type, graph_generator_type_char, 2 * graph_generator_type_array_size, 10);
+	_itoa_s(computing_data.number_of_threads, number_of_threads_char, 2 * number_of_threads_array_size, 10);
+	_itoa_s(computing_data.matrix_size, matrix_size_char, 2 * matrix_size_array_size, 10);
+	_itoa_s(computing_data.distribution_threads_model, distribution_threads_model_char, 2 * distribution_threads_model_array_size, 10);
 
 	ctime_s(computing_start_time_char, CTIME_ARRAY_SIZE, &computing_data.computing_start_time);
 	ctime_s(computing_end_time_char, CTIME_ARRAY_SIZE, &computing_data.computing_end_time);
@@ -182,6 +182,7 @@ void save_computing_data(const char *file_path, data_to_save *computing_data, in
 
 	for (i = 0; i < computing_data_size; i++)
 	{
+		printf("%d\n", i);
 		line_to_write = prepare_line_to_write(computing_data[i]);
 		fputs(line_to_write, result_file);
 	}

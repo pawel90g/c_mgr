@@ -5,9 +5,9 @@
 #include "settings.h"
 #include "graph_generator.h"
 
-double** neighborhood_matrix_generator(long graph_size, t_intensity intensity)
+double** neighborhood_matrix_generator(int graph_size, t_intensity intensity)
 {
-	long i, j;
+	int i, j;
 	double **neighborhood_matrix = (double**)malloc(sizeof(double*) * graph_size);
 	int is_road_available = 0;
 	double road_occurance_probability = 0;

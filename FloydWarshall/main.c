@@ -7,58 +7,54 @@
 #include "floyd_warshall_open_mp.h"
 #include "graph_generator.h"
 #include "file_reader_writer.h"
+#include "settings.h"
+
+#define NUMBER_OF_SCENARIOS 40
 
 void main(int argc, const char* argv[])
 {
-
-	char *startup_path = argv[0];
-	/*double **matrix;
-	int i, j = 0;
+	double **matrix;
+	int current_matrix_size = -1, current_generator_type = -1;
+	int x, i, j = 0;
 	time_t start_time, end_time;
-	int steps[5] = { 1, 2, 3, 4, 0 };
+	configuration_data *scenarios;
+	data_to_save *computing_result;
 
 	init();
 
-	printf("Generating matrix with %d threads ... \n", steps[3]);
-	start_time = time(NULL);
-	matrix = neighborhood_matrix_generator(1000, SMALL);
-	end_time = time(NULL);
+	scenarios = load_configuration_data("E:\\mgr\\scenarios.txt", NUMBER_OF_SCENARIOS);
+	computing_result = (data_to_save*)malloc(sizeof(data_to_save)*NUMBER_OF_SCENARIOS);
 
-	printf("Generating time = %f\n", difftime(end_time, start_time));
+	current_generator_type = scenarios[0].graph_generator_type;
+	current_matrix_size = scenarios[0].matrix_size;
+	matrix = neighborhood_matrix_generator(current_matrix_size, current_generator_type);
 
-	for (i = 0; i < 5; i++)
+	for (x = 0; x < NUMBER_OF_SCENARIOS; x++)
 	{
-		set_number_of_threads(steps[i]);
+		if (current_matrix_size != scenarios[x].matrix_size ||
+			current_generator_type != scenarios[x].graph_generator_type)
+		{
+			current_generator_type = scenarios[x].graph_generator_type;
+			current_matrix_size = scenarios[x].matrix_size;
 
-		printf("Computing with %d threads ... \n", steps[i]);
+			matrix = neighborhood_matrix_generator(current_matrix_size, current_generator_type);
+		}
+
+		set_number_of_threads(scenarios[x].number_of_threads);
+
 		start_time = time(NULL);
-		floyd_warshall(matrix, 1000);
+		floyd_warshall(matrix, current_matrix_size, scenarios[x].distribution_threads_model);
 		end_time = time(NULL);
 
-		printf("\n\n");
-		printf("Computing time = %f", difftime(end_time, start_time));
-		printf("\n\n");
-
-		printf("------------------------------------\n\n");
-	}*/
-
-	int i = 0;
-	long x;
-	data_to_save d_s[1];
-	d_s[0].matrix_size = 0;
-	d_s[0].number_of_threads = 4;
-	d_s[0].graph_generator_type = 1;
-	d_s[0].distribution_threads_model = 0;
-	d_s[0].computing_start_time = time(NULL);
-	
-	for (i = 0; i < INT_MAX; i++)
-	{
-		x = i * 2;
+		computing_result[x].computing_start_time = start_time;
+		computing_result[x].computing_end_time = end_time;
+		computing_result[x].distribution_threads_model = scenarios[x].distribution_threads_model;
+		computing_result[x].graph_generator_type = scenarios[x].graph_generator_type;
+		computing_result[x].matrix_size = scenarios[x].matrix_size;
+		computing_result[x].number_of_threads = scenarios[x].number_of_threads;
 	}
 
-	d_s[0].computing_end_time = time(NULL);
-
-	save_computing_data("H:\\results.csv", d_s, 1);
+	save_computing_data("E:\\mgr\\computing_results.csv", computing_result, 40);
 
 	system("PAUSE");
 }

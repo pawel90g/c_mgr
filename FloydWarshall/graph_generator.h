@@ -14,6 +14,6 @@ typedef enum
 
 double road_occurance_generator();
 double distance_generator();
-double** neighborhood_matrix_generator(long graph_size, t_intensity intensity);
+double** neighborhood_matrix_generator(int graph_size, t_intensity intensity);
 
 #endif _GRAPH_GENERATOR_
