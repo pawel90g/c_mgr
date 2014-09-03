@@ -4,12 +4,14 @@
 #include <omp.h>
 #include <time.h>
 
-#include "floyd_warshall_algorithm.h"
+#include "floyd_warshall_open_mp.h"
 #include "graph_generator.h"
 #include "file_reader_writer.h"
 
-void main(void)
+void main(int argc, const char* argv[])
 {
+
+	char *startup_path = argv[0];
 	/*double **matrix;
 	int i, j = 0;
 	time_t start_time, end_time;
@@ -56,7 +58,7 @@ void main(void)
 
 	d_s[0].computing_end_time = time(NULL);
 
-	save_computing_data("C:\\results.csv", d_s, 1);
+	save_computing_data("H:\\results.csv", d_s, 1);
 
 	system("PAUSE");
 }

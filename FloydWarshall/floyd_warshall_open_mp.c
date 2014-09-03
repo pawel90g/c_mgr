@@ -4,7 +4,7 @@
 #include <omp.h>
 
 #include "settings.h"
-#include "floyd_warshall_algorithm.h"
+#include "floyd_warshall_open_mp.h"
 
 void print_matrix(double **matrix, int matrix_size)
 {

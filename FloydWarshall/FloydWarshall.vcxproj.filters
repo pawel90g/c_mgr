@@ -21,20 +21,17 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="floyd_warshall_algorithm.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="settings.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="file_reader_writer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="floyd_warshall_open_mp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="floyd_warshall_algorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="graph_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="file_reader_writer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="floyd_warshall_open_mp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -67,14 +67,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="file_reader_writer.c" />
-    <ClCompile Include="floyd_warshall_algorithm.c" />
+    <ClCompile Include="floyd_warshall_open_mp.c" />
     <ClCompile Include="graph_generator.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="settings.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file_reader_writer.h" />
-    <ClInclude Include="floyd_warshall_algorithm.h" />
+    <ClInclude Include="floyd_warshall_open_mp.h" />
     <ClInclude Include="graph_generator.h" />
     <ClInclude Include="settings.h" />
   </ItemGroup>
