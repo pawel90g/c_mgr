@@ -63,6 +63,38 @@ configuration_data parse_data_from_file(char *data)
 	return config_data;
 }
 
+/*
+* Load configuration from txt file
+* */
+configuration_data *load_configuration_data(const char *file_path, int number_of_scenarios)
+{
+	FILE *config_file;
+	int err;
+	configuration_data *scenarios;
+
+	char line[128];
+	int buffor_size = 128;
+	int i = 0;
+
+	err = fopen_s(&config_file, file_path, "rt");
+	if (err)
+	{
+		// TODO error handling
+	}
+
+	scenarios = (configuration_data*)malloc(sizeof(configuration_data)*number_of_scenarios);
+
+	for (i = 0; i < number_of_scenarios; i++)
+	{
+		fgets(line, buffor_size, config_file);
+		scenarios[i] = parse_data_from_file(line);
+	}
+
+	fclose(config_file);
+
+	return scenarios;
+}
+
 int get_size_in_characters(int number_to_convert)
 {
 	if (number_to_convert > 9999 && number_to_convert <= 99999) return 5;
@@ -168,7 +200,7 @@ char *prepare_table_header()
 void save_computing_data(const char *file_path, data_to_save *computing_data, int computing_data_size)
 {
 	FILE *result_file;
-	errno_t err;
+	int err;
 	int i;
 	char *line_to_write;
 
@@ -188,36 +220,4 @@ void save_computing_data(const char *file_path, data_to_save *computing_data, in
 	}
 
 	fclose(result_file);
-}
-
-/*
- * Load configuration from txt file
- * */
-configuration_data *load_configuration_data(const char *file_path, int number_of_scenarios)
-{
-	FILE *config_file;
-	errno_t err;
-	configuration_data *scenarios;
-
-	char line[128];
-	int buffor_size = 128;
-	int i = 0;
-
-	err = fopen_s(&config_file, file_path, "rt");
-	if (err)
-	{
-		// TODO error handling
-	}
-
-	scenarios = (configuration_data*)malloc(sizeof(configuration_data)*number_of_scenarios);
-
-	for (i = 0; i < number_of_scenarios; i++)
-	{
-		fgets(line, buffor_size, config_file);
-		scenarios[i] = parse_data_from_file(line);
-	}
-
-	fclose(config_file);
-
-	return scenarios;
 }

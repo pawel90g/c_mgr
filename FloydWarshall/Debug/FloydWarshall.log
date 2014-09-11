@@ -1,14 +1,8 @@
-﻿Build started 2014-09-03 23:03:34.
+﻿Build started 2014-09-11 19:19:40.
      1>Project "C:\Users\Paweł\mgr\FloydWarshall\FloydWarshall.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt file_reader_writer.c main.c
-     1>cl : Command line warning D9030: '/Gm' is incompatible with multiprocessing; ignoring /MP switch
-         main.c
-     1>c:\users\paweł\mgr\floydwarshall\main.c(57): warning C4020: 'save_computing_data' : too many actual parameters
-     1>c:\users\paweł\mgr\floydwarshall\main.c(18): warning C4101: 'i' : unreferenced local variable
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /MP /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt file_reader_writer.c
          file_reader_writer.c
-     1>c:\users\paweł\mgr\floydwarshall\file_reader_writer.c(169): warning C4029: declared formal parameter list different from definition
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Paweł\mgr\Debug\FloydWarshall.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Paweł\mgr\Debug\FloydWarshall.lib" /MACHINE:X86 Debug\file_reader_writer.obj
          Debug\floyd_warshall_open_mp.obj
@@ -20,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.47
+Time Elapsed 00:00:00.40

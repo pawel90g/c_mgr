@@ -34,7 +34,7 @@ typedef struct {
 	int distribution_threads_model;
 } configuration_data;
 
-void save_computing_data(const char *file_path, data_to_save *computing_data);
+void save_computing_data(const char *file_path, data_to_save *computing_data, int computing_data_size);
 configuration_data *load_configuration_data(const char *file_path, int number_of_scenarios);
 
 #endif _FILE_READER_WRITER_

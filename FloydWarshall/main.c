@@ -11,6 +11,56 @@
 
 #define NUMBER_OF_SCENARIOS 40
 
+#define SCENARIOS_FILE_NAME "scenarios.txt"
+#define RESULTS_FILE_NAME "computing_results.csv"
+
+char *get_dir_from_file_path(char *path)
+{
+	int i = 0, j = 0;
+	size_t path_size;
+	char *dir;
+
+	path_size = strlen(path);
+
+	dir = (char*)malloc(sizeof(char)* (path_size + 1));
+
+	for (i = path_size - 1; i > 0; i--)
+	{
+		if (path[i] == '\\') break;
+	}
+
+	for (j = 0; j < i + 1; j++)
+	{
+		dir[j] = path[j];
+	}
+
+	dir[j] = '\0';
+
+	return dir;
+}
+
+char *prepare_file_path(char *app_path, char *file_name)
+{
+	int i = 0;
+	size_t file_dir_size;
+	size_t file_name_size;
+	char *prepared_file_path;
+	char *file_dir;
+
+	file_dir = get_dir_from_file_path(app_path);
+
+	file_dir_size = strlen(file_dir);
+	file_name_size = strlen(file_name);
+
+	prepared_file_path = (char*)malloc(sizeof(char) * (file_dir_size + file_name_size + 2));
+
+	memcpy(prepared_file_path, file_dir, file_dir_size);
+	memcpy(&prepared_file_path[file_dir_size], file_name, file_name_size);
+	memcpy(&prepared_file_path[file_dir_size + file_name_size], "\0", 1);
+
+	return prepared_file_path;
+}
+
 void main(int argc, const char* argv[])
 {
 	double **matrix;
@@ -22,7 +72,7 @@ void main(int argc, const char* argv[])
 
 	init();
 
-	scenarios = load_configuration_data("E:\\mgr\\scenarios.txt", NUMBER_OF_SCENARIOS);
+	scenarios = load_configuration_data(prepare_file_path(argv[0], SCENARIOS_FILE_NAME), NUMBER_OF_SCENARIOS);
 	computing_result = (data_to_save*)malloc(sizeof(data_to_save)*NUMBER_OF_SCENARIOS);
 
 	current_generator_type = scenarios[0].graph_generator_type;
@@ -54,7 +104,7 @@ void main(int argc, const char* argv[])
 		computing_result[x].number_of_threads = scenarios[x].number_of_threads;
 	}
 
-	save_computing_data("E:\\mgr\\computing_results.csv", computing_result, 40);
+	save_computing_data(prepare_file_path(argv[0], RESULTS_FILE_NAME), computing_result, 40);
 
 	system("PAUSE");
 }
