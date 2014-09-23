@@ -15,7 +15,7 @@ double** neighborhood_matrix_generator(int graph_size, t_intensity intensity)
 #pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
 	for (i = 0; i < graph_size; i++)
 	{
-		neighborhood_matrix[i] = (double*)malloc(sizeof(double) * graph_size);
+		neighborhood_matrix[i] = (double*)malloc(sizeof(double) * graph_size);\
 	}
 
 #pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)

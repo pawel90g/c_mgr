@@ -22,7 +22,7 @@ configuration_data parse_data_from_file(char *data)
 
 	configuration_data config_data;
 
-	data_len = _mbstrlen(data);
+	data_len = strlen(data);
 
 	for (i = 0; i < data_len; i++)
 	{
@@ -66,27 +66,22 @@ configuration_data parse_data_from_file(char *data)
 /*
 * Load configuration from txt file
 * */
-configuration_data *load_configuration_data(const char *file_path, int number_of_scenarios)
+configuration_data *load_configuration_data(char *file_path, int number_of_scenarios)
 {
 	FILE *config_file;
-	int err;
 	configuration_data *scenarios;
 
 	char line[128];
-	int buffor_size = 128;
+	int buffor_size = 127;
 	int i = 0;
 
-	err = fopen_s(&config_file, file_path, "rt");
-	if (err)
-	{
-		// TODO error handling
-	}
+	config_file = fopen(file_path, "rt");
 
-	scenarios = (configuration_data*)malloc(sizeof(configuration_data)*number_of_scenarios);
-
+	scenarios = (configuration_data*)malloc(sizeof(configuration_data)*number_of_scenarios * 2);
+	
 	for (i = 0; i < number_of_scenarios; i++)
 	{
-		fgets(line, buffor_size, config_file);
+		fgets(&line, buffor_size, config_file);
 		scenarios[i] = parse_data_from_file(line);
 	}
 
@@ -141,13 +136,13 @@ char *prepare_line_to_write(data_to_save computing_data)
 	computing_end_time_char = (char*)malloc(sizeof(char) * CTIME_ARRAY_SIZE);
 
 	// convert data to char arrays
-	_itoa_s(computing_data.graph_generator_type, graph_generator_type_char, 2 * graph_generator_type_array_size, 10);
-	_itoa_s(computing_data.number_of_threads, number_of_threads_char, 2 * number_of_threads_array_size, 10);
-	_itoa_s(computing_data.matrix_size, matrix_size_char, 2 * matrix_size_array_size, 10);
-	_itoa_s(computing_data.distribution_threads_model, distribution_threads_model_char, 2 * distribution_threads_model_array_size, 10);
+	snprintf(graph_generator_type_char, 2 * graph_generator_type_array_size, "%d", computing_data.graph_generator_type);
+	snprintf(number_of_threads_char, 2 * number_of_threads_array_size, "%d", computing_data.number_of_threads);
+	snprintf(matrix_size_char, 2 * matrix_size_array_size, "%d", computing_data.matrix_size);
+	snprintf(distribution_threads_model_char, 2 * distribution_threads_model_array_size, "%d", computing_data.distribution_threads_model);
 
-	ctime_s(computing_start_time_char, CTIME_ARRAY_SIZE, &computing_data.computing_start_time);
-	ctime_s(computing_end_time_char, CTIME_ARRAY_SIZE, &computing_data.computing_end_time);
+	computing_start_time_char = asctime(localtime(&computing_data.computing_start_time));
+	computing_end_time_char = asctime(localtime(&computing_data.computing_end_time));
 
 	// copy data from partial arrays to final array
 	memcpy(line_array, graph_generator_type_char, graph_generator_type_array_size);
@@ -197,24 +192,19 @@ char *prepare_table_header()
 /*
  * Save computing data in csv file
  * */
-void save_computing_data(const char *file_path, data_to_save *computing_data, int computing_data_size)
+void save_computing_data(char *file_path, data_to_save *computing_data, int computing_data_size)
 {
 	FILE *result_file;
 	int err;
 	int i;
 	char *line_to_write;
 
-	err = fopen_s(&result_file, file_path, "at");
-	if (err)
-	{
-		// TODO error handling
-	}
+	result_file = fopen(file_path, "at");
 
 	fputs(prepare_table_header(), result_file);
 
 	for (i = 0; i < computing_data_size; i++)
 	{
-		printf("%d\n", i);
 		line_to_write = prepare_line_to_write(computing_data[i]);
 		fputs(line_to_write, result_file);
 	}

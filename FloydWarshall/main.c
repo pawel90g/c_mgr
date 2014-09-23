@@ -3,41 +3,17 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "floyd_warshall_open_mp.h"
 #include "graph_generator.h"
 #include "file_reader_writer.h"
 #include "settings.h"
 
-#define NUMBER_OF_SCENARIOS 40
+#define NUMBER_OF_SCENARIOS 2
 
 #define SCENARIOS_FILE_NAME "scenarios.txt"
 #define RESULTS_FILE_NAME "computing_results.csv"
-
-char *get_dir_from_file_path(char *path)
-{
-	int i = 0, j = 0;
-	size_t path_size;
-	char *dir;
-
-	path_size = strlen(path);
-
-	dir = (char*)malloc(sizeof(char)* (path_size + 1));
-
-	for (i = path_size - 1; i > 0; i--)
-	{
-		if (path[i] == '\\') break;
-	}
-
-	for (j = 0; j < i + 1; j++)
-	{
-		dir[j] = path[j];
-	}
-
-	dir[j] = '\0';
-
-	return dir;
-}
 
 char *prepare_file_path(char *app_path, char *file_name)
 {
@@ -45,38 +21,52 @@ char *prepare_file_path(char *app_path, char *file_name)
 	size_t file_dir_size;
 	size_t file_name_size;
 	char *prepared_file_path;
-	char *file_dir;
 
-	file_dir = get_dir_from_file_path(app_path);
-
-	file_dir_size = strlen(file_dir);
+	file_dir_size = strlen(app_path);
 	file_name_size = strlen(file_name);
 
 	prepared_file_path = (char*)malloc(sizeof(char) * (file_dir_size + file_name_size + 2));
 
-	memcpy(prepared_file_path, file_dir, file_dir_size);
-	memcpy(&prepared_file_path[file_dir_size], file_name, file_name_size);
-	memcpy(&prepared_file_path[file_dir_size + file_name_size], "\0", 1);
+	memcpy(prepared_file_path, app_path, file_dir_size);
+	memcpy(&prepared_file_path[file_dir_size], "/", 1);
+	memcpy(&prepared_file_path[file_dir_size + 1], file_name, file_name_size);
+	memcpy(&prepared_file_path[file_dir_size + 1 + file_name_size], "\0", 1);
 
 	return prepared_file_path;
 }
 
-void main(int argc, const char* argv[])
+
+int main(void)
 {
 	double **matrix;
 	int current_matrix_size = -1, current_generator_type = -1;
-	int x, i, j = 0;
+	int x, i;
 	time_t start_time, end_time;
 	configuration_data *scenarios;
 	data_to_save *computing_result;
+	char *config_file_path;
+	char app_dir_buffor[1024];
 
 	init();
 
-	scenarios = load_configuration_data(prepare_file_path(argv[0], SCENARIOS_FILE_NAME), NUMBER_OF_SCENARIOS);
+	if(getcwd(app_dir_buffor, sizeof(app_dir_buffor)) != NULL)
+	{
+		config_file_path = prepare_file_path(app_dir_buffor, SCENARIOS_FILE_NAME);
+	}
+	else
+	{
+		printf("An error occurred while parsing the path");
+		return 1;
+	}
+
+	scenarios = load_configuration_data(config_file_path, NUMBER_OF_SCENARIOS);
+
 	computing_result = (data_to_save*)malloc(sizeof(data_to_save)*NUMBER_OF_SCENARIOS);
 
 	current_generator_type = scenarios[0].graph_generator_type;
 	current_matrix_size = scenarios[0].matrix_size;
+
+	set_number_of_threads(0);
 	matrix = neighborhood_matrix_generator(current_matrix_size, current_generator_type);
 
 	for (x = 0; x < NUMBER_OF_SCENARIOS; x++)
@@ -84,9 +74,19 @@ void main(int argc, const char* argv[])
 		if (current_matrix_size != scenarios[x].matrix_size ||
 			current_generator_type != scenarios[x].graph_generator_type)
 		{
+			if (matrix)
+			{
+				for (i = 0; i < current_matrix_size; i++)
+				{
+					free(matrix[i]);
+				}
+				free(matrix);
+			}
+
 			current_generator_type = scenarios[x].graph_generator_type;
 			current_matrix_size = scenarios[x].matrix_size;
 
+			set_number_of_threads(0);
 			matrix = neighborhood_matrix_generator(current_matrix_size, current_generator_type);
 		}
 
@@ -104,7 +104,10 @@ void main(int argc, const char* argv[])
 		computing_result[x].number_of_threads = scenarios[x].number_of_threads;
 	}
 
-	save_computing_data(prepare_file_path(argv[0], RESULTS_FILE_NAME), computing_result, 40);
+	save_computing_data(prepare_file_path(app_dir_buffor, RESULTS_FILE_NAME), computing_result, NUMBER_OF_SCENARIOS);
 
-	system("PAUSE");
+	free(computing_result);
+	free(scenarios);
+
+	return 0;
 }

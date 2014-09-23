@@ -7,6 +7,8 @@
 #include "settings.h"
 #include "floyd_warshall_open_mp.h"
 
+#define minimum(a, b) ((a < b) ? a : b)
+
 void print_matrix(double **matrix, int matrix_size)
 {
 	int i, j = 0;
@@ -30,8 +32,8 @@ void floyd_warshall(double **graph, long graph_size, t_thread_distribution_model
 	double **temp_tab;
 	int threads_to_use_0, threads_to_use_1;
 
-	threads_to_use_0 = t_distrib == STEADY ? sqrt(number_of_threads) == 0 ? number_of_threads : sqrt(number_of_threads) : number_of_threads;
-	threads_to_use_1 = t_distrib == STEADY ? threads_to_use_0 == 0 ? number_of_threads : number_of_threads / threads_to_use_0 : number_of_threads;
+	threads_to_use_0 = t_distrib == STEADY ? (sqrt(number_of_threads) == 0 ? number_of_threads : sqrt(number_of_threads)) : number_of_threads;
+	threads_to_use_1 = t_distrib == STEADY ? (threads_to_use_0 == 0 ? number_of_threads : (number_of_threads / threads_to_use_0)) : number_of_threads;
 
 #pragma omp parallel for num_threads(number_of_threads == 0 ? graph_size : number_of_threads)
 	for (i = 0; i < graph_size; i++)
@@ -67,7 +69,7 @@ void floyd_warshall(double **graph, long graph_size, t_thread_distribution_model
 				}
 				else
 				{
-					temp_tab[i][j] = min(graph[i][j], delta);
+					temp_tab[i][j] = minimum(graph[i][j], delta);
 				}
 			}
 		}
